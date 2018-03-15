@@ -1,5 +1,19 @@
 # -*- coding: utf-8 -*-
-from .block import create_genesis_block, Block
+from .block import Block
+from .pow import ProofOfWork
+
+
+def create_genesis_block():
+    """
+    生成创世区块,创世区块是第一个区块,故无父区块哈希
+    :return:
+    """
+    block = Block(data="Genesis Block", prev_hash="")
+    pow = ProofOfWork(block)
+    nonce, digest = pow.mine()
+    block.nonce = nonce
+    block.hash = digest
+    return block
 
 
 class BlockChain:
@@ -17,4 +31,9 @@ class BlockChain:
         :return:
         """
         prev_block = self.blocks[len(self.blocks)-1]
-        self.blocks.append(Block(data, prev_block.hash))
+        block = Block(data, prev_block.hash)
+        pow = ProofOfWork(block)
+        nonce, digest = pow.mine()
+        block.nonce = nonce
+        block.hash = digest
+        self.blocks.append(block)
