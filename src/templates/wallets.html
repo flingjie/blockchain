@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <div class="text-center">
+      <div>
+          <h1>钱包管理工具</h1>
+          <p>点击下面按钮生成新的钱包</p>
+          <form method="post">
+            <button class="btn btn-primary" type="submit">新建钱包</button>
+          </form>
+      </div>
+      <div>
+          <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">地址</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in wallets %}
+                <tr>
+                  <th scope="row">账号{{ loop.index }}</th>
+                  <td>{{ i.address }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+      </div>
+      <hr>
+      <div></div>
+    </div>
+</div>
+{% endblock %}

@@ -20,10 +20,10 @@ class ProofOfWork():
         while True:
             nonce = str(i)
             message = hashlib.sha256()
-            message.update(str(self.block.prev_hash).encode('utf-8'))
-            message.update(str(self.block.data).encode('utf-8'))
-            message.update(str(self.block.timestamp).encode('utf-8'))
-            message.update(nonce.encode("utf-8"))
+            message.update((self.block.prev_hash +
+                            self.block.data +
+                            self.block.timestamp +
+                            nonce).encode('utf-8'))
             digest = message.hexdigest()
             if digest.startswith(prefix):
                 return nonce, digest
