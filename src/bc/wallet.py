@@ -15,7 +15,7 @@ class Wallet:
     def __init__(self):
         random_gen = Crypto.Random.new().read
         self._private_key = RSA.generate(1024, random_gen)
-        self._public_key = self._private_key.publickey()
+        self.public_key = self._private_key.publickey()
         self._signer = PKCS1_v1_5.new(self._private_key)
 
     @property
@@ -23,7 +23,7 @@ class Wallet:
         """
             通过公钥生成地址
         """
-        h = SHA.new(self._public_key.exportKey(format='DER'))
+        h = SHA.new(self.public_key.exportKey(format='DER'))
         return base58.b58encode(h.digest())
 
     def sign(self, message):
@@ -33,10 +33,11 @@ class Wallet:
         h = SHA.new(message.encode('utf8'))
         return binascii.hexlify(self._signer.sign(h)).decode('ascii')
 
-    def verify(self, message, signature):
-        """
-            验证签名
-        """
-        verifier = PKCS1_v1_5.new(self._public_key)
-        h = SHA.new(message.encode('utf8'))
-        return verifier.verify(h, binascii.unhexlify(signature))
+
+def verify_sign(pubkey, message, signature):
+    """
+        验证签名
+    """
+    verifier = PKCS1_v1_5.new(pubkey)
+    h = SHA.new(message.encode('utf8'))
+    return verifier.verify(h, binascii.unhexlify(signature))
